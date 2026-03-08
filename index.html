@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Willow for Windows</title>
+  <link rel="icon" href="./assets/willow-icon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="./assets/willow-mark.png" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-top: #07101a;
+      --bg-bottom: #13385a;
+      --panel: rgba(8, 20, 34, 0.78);
+      --panel-border: rgba(134, 179, 232, 0.22);
+      --text-main: #eef6ff;
+      --text-soft: #a6bfd9;
+      --accent: #9ecaff;
+      --accent-strong: #f2f7ff;
+      --shadow: rgba(3, 9, 18, 0.32);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 14% 14%, rgba(149, 201, 255, 0.22), transparent 24%),
+        radial-gradient(circle at 88% 10%, rgba(89, 175, 220, 0.18), transparent 16%),
+        radial-gradient(circle at 74% 62%, rgba(7, 53, 103, 0.38), transparent 18%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+    }
+    main {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 36px 0 72px;
+    }
+    .page-shell {
+      display: grid;
+      gap: 20px;
+    }
+    .hero {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1.04fr 0.96fr;
+      align-items: stretch;
+    }
+    .panel {
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      border-radius: 26px;
+      padding: 26px;
+      box-shadow: 0 24px 54px var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .hero-copy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .hero-copy p {
+      max-width: 58ch;
+      font-size: 17px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(40px, 5vw, 62px);
+      line-height: 0.94;
+      letter-spacing: -0.03em;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.02;
+    }
+    h1,
+    h2,
+    .brand-name {
+      font-family: "Bahnschrift SemiCondensed", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+    }
+    p {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    .section-copy {
+      margin-top: 10px;
+      max-width: 60ch;
+    }
+    .panel > .eyebrow + h1,
+    .panel > .eyebrow + h2 {
+      margin-top: 14px;
+    }
+    .panel > h1 + p,
+    .panel > h2 + p,
+    .panel > h2 + .section-copy {
+      margin-top: 14px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 12px;
+      width: fit-content;
+      max-width: max-content;
+      justify-self: start;
+      border-radius: 999px;
+      background: rgba(113, 159, 225, 0.14);
+      border: 1px solid rgba(148, 185, 242, 0.22);
+      color: var(--accent-strong);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .brand-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 2px;
+    }
+    .brand-mark {
+      width: clamp(48px, 5vw, 64px);
+      height: clamp(48px, 5vw, 64px);
+      object-fit: contain;
+      display: block;
+    }
+    .brand-name {
+      font-size: clamp(40px, 5vw, 54px);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--accent-strong);
+    }
+    .download-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid rgba(158, 196, 255, 0.24);
+    }
+    .button.primary {
+      background: linear-gradient(180deg, #dcecff, #bdd3ef);
+      color: #10203a;
+      border-color: transparent;
+    }
+    .button.secondary {
+      color: var(--text-main);
+      background: rgba(9, 20, 35, 0.34);
+    }
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(151, 191, 243, 0.16);
+      background: rgba(8, 19, 33, 0.52);
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .preview-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .meta-card {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(140, 176, 229, 0.16);
+      background: rgba(7, 17, 30, 0.42);
+    }
+    .meta-card strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 21px;
+      color: #f7fbff;
+    }
+    .hero-preview {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(8, 19, 33, 0.95), rgba(8, 20, 34, 0.78));
+    }
+    .hero-shot,
+    .hero-logo {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(151, 191, 243, 0.16);
+      background: rgba(10, 19, 32, 0.72);
+      min-height: 320px;
+    }
+    .hero-shot img,
+    .hero-logo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .hero-logo {
+      display: grid;
+      place-items: center;
+      min-height: 360px;
+      padding: 48px;
+    }
+    .hero-logo img {
+      object-fit: contain;
+      max-width: min(280px, 100%);
+      height: auto;
+    }
+    .features-grid,
+    .ops-grid,
+    .gallery-grid,
+    .update-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .features-grid,
+    .ops-grid,
+    .gallery-grid,
+    .update-grid,
+    .preview-stats {
+      margin-top: 18px;
+    }
+    ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+    .feature-card,
+    .ops-card,
+    .shot-card {
+      border-radius: 22px;
+      border: 1px solid rgba(140, 176, 229, 0.16);
+      background: rgba(7, 17, 30, 0.38);
+      overflow: hidden;
+    }
+    .shot-card {
+      margin: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      align-content: start;
+    }
+    .feature-card {
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+    .ops-card {
+      padding: 20px;
+      display: grid;
+      gap: 10px;
+    }
+    .feature-card strong,
+    .ops-card strong,
+    .shot-card strong {
+      font-size: 17px;
+      color: var(--accent-strong);
+    }
+    .shot-card img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: rgba(9, 18, 31, 0.9);
+    }
+    .shot-card figcaption {
+      padding: 16px;
+      display: grid;
+      gap: 8px;
+    }
+    .shot-card span,
+    .feature-card span,
+    .ops-card span {
+      color: var(--text-soft);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .intro-panel,
+    .update-panel {
+      display: grid;
+      gap: 14px;
+    }
+    .release-summary,
+    .release-empty {
+      margin-top: 12px;
+    }
+    .release-list {
+      margin-top: 12px;
+      padding-left: 18px;
+    }
+    .intro-panel p {
+      max-width: 70ch;
+      font-size: 16px;
+    }
+    .technical-details {
+      margin-top: 4px;
+      border-radius: 22px;
+      border: 1px solid rgba(140, 176, 229, 0.16);
+      background: rgba(7, 17, 30, 0.36);
+      overflow: hidden;
+    }
+    .technical-details summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 18px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-strong);
+    }
+    .technical-details summary::-webkit-details-marker {
+      display: none;
+    }
+    .technical-body {
+      padding: 0 20px 20px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+    .hash-line {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(7, 17, 30, 0.44);
+      border: 1px solid rgba(140, 176, 229, 0.16);
+      color: var(--text-soft);
+      overflow-wrap: anywhere;
+    }
+    code {
+      font-family: Consolas, "SFMono-Regular", monospace;
+      color: #f7fbff;
+    }
+    @media (max-width: 980px) {
+      .hero,
+      .features-grid,
+      .ops-grid,
+      .gallery-grid,
+      .preview-stats,
+      .update-grid,
+      .technical-body {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 760px) {
+      .preview-stats {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      main {
+        padding-top: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="page-shell">
+      <section class="hero">
+        <article class="panel hero-copy">
+          <div class="brand-row">
+            <img class="brand-mark" src="./assets/willow-mark.png" alt="Willow mark" />
+            <span class="brand-name">Willow</span>
+          </div>
+          <div class="eyebrow">Windows Browser</div>
+          <h1>Search faster. Keep your flow.</h1>
+          <p>Willow is a Windows-first browser shell with a cleaner start page, lighter navigation, profile separation, and branded fallbacks when the web goes sideways. The goal is simple: make the app feel intentional instead of like a generic wrapper.</p>
+          <div class="download-actions">
+            <a class="button primary" href="./downloads/WillowSetup.zip">Download for Windows</a>
+            <a class="button secondary" href="./downloads/WillowSetup.exe">Direct installer</a>
+            <a class="button secondary" href="#screenshots">See screenshots</a>
+          </div>
+          <div class="hero-chips">
+            <span class="hero-chip">Free download</span>
+            <span class="hero-chip">Fresh profile on first launch</span>
+            <span class="hero-chip">Built-in update prompt</span>
+            <span class="hero-chip">Pinned WebView2 runtime</span>
+          </div>
+        </article>
+        <aside class="panel hero-preview">
+        <div class="hero-shot">
+          <img src="./screenshots/search-home.png" alt="Willow app preview" />
+        </div>
+          <div class="preview-stats">
+            <div class="meta-card">
+              <span>Clean install</span>
+              <strong>No bundled dev data</strong>
+            </div>
+            <div class="meta-card">
+              <span>First run</span>
+              <strong>Create your own profile</strong>
+            </div>
+            <div class="meta-card">
+              <span>Updates</span>
+              <strong>Ready when you publish</strong>
+            </div>
+            <div class="meta-card">
+              <span>Browser runtime</span>
+              <strong>Pinned to 145.0.3800.97</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel intro-panel">
+        <span class="eyebrow">Why Willow</span>
+        <h2>A focused Windows browser shell that makes everyday actions feel lighter</h2>
+        <p>Jump straight to a site, search without breaking your rhythm, keep separate profiles handy, and recover from dead pages without landing on a boring error screen. Installs, updates, and uninstalling are handled as first-class parts of the experience instead of afterthoughts.</p>
+      </section>
+
+      <section class="panel">
+        <span class="eyebrow">Install Flow</span>
+        <h2>What people should expect after clicking download</h2>
+        <p class="section-copy">The public build is meant to be understandable: one safer ZIP download for the browser, one direct installer if needed, one obvious upgrade path, and one clean way back out if someone removes it.</p>
+        <div class="ops-grid">
+          <article class="ops-card">
+            <strong>Install cleanly</strong>
+            <span>The setup app copies a fresh build into <code>%LocalAppData%\Programs\Willow</code>, writes uninstall metadata, can drop a desktop shortcut, and provisions the exact WebView2 browser runtime Willow expects.</span>
+          </article>
+          <article class="ops-card">
+            <strong>Update with context</strong>
+            <span>Installed copies compare their version to the hosted manifest, prompt before replacing files, and show what changed after the update completes.</span>
+          </article>
+          <article class="ops-card">
+            <strong>Uninstall cleanly</strong>
+            <span>Willow registers with Windows uninstall settings and also keeps an explicit <code>Uninstall Willow</code> shortcut in the Start menu.</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="eyebrow">Highlights</span>
+        <h2>Small details that make the whole window feel better</h2>
+        <p class="section-copy">This is built to feel direct and polished in the places people touch every day, not just to technically open web pages.</p>
+        <div class="features-grid">
+          <article class="feature-card">
+            <strong>Search that stays in flow</strong>
+            <span>The start page makes it easy to type once, search fast, or jump directly to a site without the usual browser clutter.</span>
+          </article>
+          <article class="feature-card">
+            <strong>Profiles without the mess</strong>
+            <span>Set up a fresh profile on first launch and keep your browsing space feeling personal instead of preloaded with someone else's history.</span>
+          </article>
+          <article class="feature-card">
+            <strong>Offline pages with personality</strong>
+            <span>Even when a site fails to load, Willow keeps the experience branded and interactive instead of dropping into a dead generic error page.</span>
+          </article>
+        </div>
+      </section>
+
+    <section class="panel gallery-block" id="screenshots">
+      <span class="eyebrow">Screenshots</span>
+      <h2>See Willow in action</h2>
+      <p class="section-copy">These captures come from the current Windows build, so what people download is what they see here.</p>
+      <div class="gallery-grid">
+      <figure class="shot-card">
+        <img src="./screenshots/search-home.png" alt="Search-first home" loading="lazy" />
+        <figcaption>
+          <strong>Search-first home</strong>
+          <span>The start page keeps search, direct navigation, and your current tabs in one view.</span>
+        </figcaption>
+      </figure>
+      <figure class="shot-card">
+        <img src="./screenshots/search-suggestions.png" alt="Inline search suggestions" loading="lazy" />
+        <figcaption>
+          <strong>Inline search suggestions</strong>
+          <span>Type once and Willow can either jump directly to a site or hand the query off to search without breaking the flow.</span>
+        </figcaption>
+      </figure>
+      <figure class="shot-card">
+        <img src="./screenshots/offline-fallback.png" alt="Offline fallback game" loading="lazy" />
+        <figcaption>
+          <strong>Offline fallback game</strong>
+          <span>No-connection states stay branded and interactive instead of dropping into a generic browser error page.</span>
+        </figcaption>
+      </figure>
+      </div>
+    </section>
+
+      <section class="panel update-panel">
+        <span class="eyebrow">Updates</span>
+        <h2>Release notes live in the app and on the download page</h2>
+        <p class="section-copy">The website stays simple for the user, but the update story is not vague anymore. The manifest can carry a summary and change bullets, the app surfaces them before updating, and the next launch confirms what changed.</p>
+        <div class="update-grid">
+          <article class="feature-card">
+            <strong>Same browser engine everywhere</strong>
+            <span>New installs no longer depend on whatever WebView2 runtime happens to be on the target PC. Willow can provision and reuse the pinned runtime for this release.</span>
+          </article>
+          <article class="feature-card">
+            <strong>Post-update notes are visible</strong>
+            <span>When Willow updates, the next launch can tell the user what changed instead of silently replacing files in the background.</span>
+          </article>
+          <article class="feature-card">
+            <strong>Uninstall is explicit</strong>
+            <span>Windows uninstall registration and a Start menu uninstall shortcut mean removing Willow is as obvious as installing it.</span>
+          </article>
+        </div>
+        <details class="technical-details" id="release-notes">
+          <summary>Technical release details</summary>
+          <div class="technical-body">
+            <ul>
+              <li>Browser ZIP download: <code>44.0 MB</code></li>
+              <li>Installer size: <code>49.3 MB</code></li>
+              <li>Portable package: <code>5.4 MB</code> framework-dependent</li>
+              <li>Required runtime: <code>.NET Desktop Runtime 10.0.3</code></li>
+              <li>Pinned browser runtime: <code>WebView2 Fixed 145.0.3800.97</code></li>
+              <li>Install target: <code>%LocalAppData%\Programs\Willow</code></li>
+              <li>Manifest path: <code>updates/stable/manifest.json</code></li>
+              <li>Current version: <code>1.0.14</code> on <code>win-x64</code></li>
+            </ul>
+            <div class="hash-line">
+              <strong>Release summary</strong><br />
+<p class="release-summary">Willow 1.0.14 fixes the omnibox suggestion hover rendering on scaled laptops and tightens the top-bar visuals.</p>
+            <ul class="release-list">
+              <li>Switches the address suggestions popup off the transparent layered rendering path so hovered suggestions stay sharper on display-scaled laptops.</li>
+              <li>Removes the extra gap styling between suggestion rows that could show dark separator bands while moving through results.</li>
+              <li>Stops scaling the security button glyph on hover so the icon in the address bar no longer blurs.</li>
+              <li>Keeps the omnibox and suggestion dropdown aligned as a single attached control.</li>
+              <li>Refreshes the published build and update feed with the hover-rendering fix.</li>
+            </ul>
+            </div>
+            <div class="hash-line">
+              <strong>SHA-256 package hash</strong><br />
+              <code>F7E4ED40F8A6A59BB01A37DEF757484E92891BE427B0C43D1DA0135829C82AD2</code>
+            </div>
+          </div>
+        </details>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

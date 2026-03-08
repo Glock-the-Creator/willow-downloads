@@ -1,0 +1,25 @@
+{
+    "version":  "1.0.14",
+    "channel":  "stable",
+    "installerUrl":  "https://glock-the-creator.github.io/willow-downloads/downloads/WillowSetup.exe",
+    "packageUrl":  "https://glock-the-creator.github.io/willow-downloads/packages/Willow-1.0.14-win-x64.zip",
+    "packageSha256":  "F7E4ED40F8A6A59BB01A37DEF757484E92891BE427B0C43D1DA0135829C82AD2",
+    "frameworkDependent":  true,
+    "windowsDesktopRuntimeChannel":  "10.0",
+    "windowsDesktopRuntimeVersion":  "10.0.3",
+    "windowsDesktopRuntimeInstallerUrl":  "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/10.0.3/windowsdesktop-runtime-10.0.3-win-x64.exe",
+    "windowsDesktopRuntimeInstallerSha512":  "7CE6F187618A550594BB5E979F3ABA46E7A1CEED712B404B43160EA5CA6E60F681833CE03475054CE31485498E709CDB884B70C5B4B70BA4A496A595B0C77A0E",
+    "webView2FixedRuntimeVersion":  "145.0.3800.97",
+    "webView2FixedRuntimeUrl":  "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/9d7fb9a5-5296-47f6-b3e7-eb9ebfc06ca2/Microsoft.WebView2.FixedVersionRuntime.145.0.3800.97.x64.cab",
+    "webView2FixedRuntimeSha256":  "D19C7B5F51FAFD9EF97B8BE490010323A8475B710906D9937713728E62B45BAB",
+    "releaseNotesUrl":  "https://glock-the-creator.github.io/willow-downloads/#release-notes",
+    "summary":  "Willow 1.0.14 fixes the omnibox suggestion hover rendering on scaled laptops and tightens the top-bar visuals.",
+    "changes":  [
+                    "Switches the address suggestions popup off the transparent layered rendering path so hovered suggestions stay sharper on display-scaled laptops.",
+                    "Removes the extra gap styling between suggestion rows that could show dark separator bands while moving through results.",
+                    "Stops scaling the security button glyph on hover so the icon in the address bar no longer blurs.",
+                    "Keeps the omnibox and suggestion dropdown aligned as a single attached control.",
+                    "Refreshes the published build and update feed with the hover-rendering fix."
+                ],
+    "publishedAtUtc":  "2026-03-08T17:46:04.2247377Z"
+}
